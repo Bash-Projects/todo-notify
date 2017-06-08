@@ -15,6 +15,7 @@ use POSIX qw/strftime/;
 binmode STDOUT, ":utf8";
 
 my $todocount = 0;
+my $current_date = getCurrentDate();
 
 # get date from due string using regular expression
 sub getDueDateFromString {
@@ -46,7 +47,13 @@ sub getStartDateFromString {
 # show notification, set urgency to critical if task prio is (A)
 sub showNotification {
   my $urgency = ($_ =~ /.*(\(A\)).*/) ? "critical" : "normal";
+  $urgency = taskIsDue($_) ? "critical" : "normal";
   `notify-send -u "$urgency" -a "Todo.txt" "$_[0]"`;
+}
+
+sub taskIsDue {
+  my $due_date = getDueDateFromString($_);
+  return ($current_date ge $due_date) ? 1 : 0;
 }
 
 sub prioIsSet { return getPrioFromString(shift); }
@@ -60,7 +67,6 @@ foreach (split(/\n/,`bash todo.sh -p ls`)) {
   next if ( $_ =~ /^\d\ x\ .*/); # not archieved tasks
   next if not ( prioIsSet($_) or duedateIsSet($_) or startdateIsSet($_) );
 
-  my $current_date = getCurrentDate();
   my $due_date     = getDueDateFromString($_);
   my $start_date   = getStartDateFromString($_);
   if (
