@@ -47,7 +47,7 @@ sub getStartDateFromString {
 # show notification, set urgency to critical if task prio is (A)
 sub showNotification {
   my $urgency = ($_ =~ /.*(\(A\)).*/) ? "critical" : "normal";
-  $urgency = taskIsDue($_) ? "critical" : "normal";
+  $urgency = taskIsDue($_) ? "critical" : "normal" if not $urgency;
   `notify-send -u "$urgency" -a "Todo.txt" "$_[0]"`;
 }
 
