@@ -72,7 +72,7 @@ foreach (split(/\n/,`bash todo.sh -p ls`)) {
   if (
     (($current_date gt $due_date) or ($current_date eq $due_date)) ||
     (($current_date gt $start_date) or ($current_date eq $start_date)) ||
-    (prioIsSet($_))
+    (prioIsSet($_) eq "\(A\)")
   ) {
     $todocount += 1;
     showNotification($_);
