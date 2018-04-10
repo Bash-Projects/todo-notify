@@ -63,8 +63,8 @@ sub getCurrentDate { return strftime("%Y-%m-%d", localtime); }
 
 # get all tasks to the array line by line
 foreach (split(/\n/,`bash todo.sh -p ls`)) {
-  next if not ( $_ =~ /^\d\ .*/); # only tasks (ID)
-  next if ( $_ =~ /^\d\ x\ .*/); # not archieved tasks
+  next if not ( $_ =~ /^\d+\ .*/); # only tasks (ID)
+  next if ( $_ =~ /^\d+\ x\ .*/); # not archieved tasks
   next if not ( prioIsSet($_) or duedateIsSet($_) or startdateIsSet($_) );
 
   my $due_date     = getDueDateFromString($_);
